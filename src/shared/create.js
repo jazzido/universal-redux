@@ -3,8 +3,6 @@ import createLogger from 'redux-logger';
 
 // TODO: parameterize react-router
 import { syncHistory } from 'react-router-redux';
-import { browserHistory } from 'react-router';
-import createMemoryHistory from 'react-router/lib/createMemoryHistory';
 
 import { compose as composeDevtools, listenToRouter as linkDevtoolsToRouter } from '../client/devtools';
 import { applyMiddleware, createStore } from 'redux';
@@ -21,14 +19,9 @@ function hmr(store) {
   }
 }
 
-export default function create(providedMiddleware, data) {
+export default function create(providedMiddleware, history, data) {
   // TODO: parameterize react-router
-  let router;
-  if (__CLIENT__) {
-    router = syncHistory(browserHistory);
-  } else {
-    router = syncHistory(createMemoryHistory());
-  }
+  const router = syncHistory(history);
 
   const defaultMiddleware = [ router ];
 
@@ -46,7 +39,9 @@ export default function create(providedMiddleware, data) {
 
   const store = finalCreateStore(reducers, data);
 
-  linkDevtoolsToRouter(router, store);
+  if (useDevtools) {
+    linkDevtoolsToRouter(router, store);
+  }
 
   hmr(store);
 

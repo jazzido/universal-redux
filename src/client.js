@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { browserHistory } from 'react-router';
 
 import createStore from './shared/create';
 import { render as renderDevtools } from './client/devtools';
@@ -11,7 +12,7 @@ import createRootClientComponent from 'universal-redux/rootClientComponent';
 
 const dest = document.getElementById('content');
 
-const store = createStore(middleware, window.__data);
+const store = createStore(middleware, browserHistory, window.__data);
 const devComponent = renderDevtools();
 
 // There is probably no need to be asynchronous here

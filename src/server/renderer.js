@@ -6,6 +6,7 @@ import createStore from '../shared/create';
 import configure from '../configure';
 import html from './html';
 import getTools from './tools';
+import createMemoryHistory from 'react-router/lib/createMemoryHistory';
 
 global.__CLIENT__ = false;
 global.__SERVER__ = true;
@@ -28,8 +29,10 @@ export default (projectConfig, projectToolsConfig) => {
     }
 
     const middleware = config.redux.middleware ? require(path.resolve(config.redux.middleware)).default : [];
-    const store = createStore(middleware);
+    const memoryHistory = createMemoryHistory(originalUrl);
+    const store = createStore(middleware, memoryHistory);
     const routes = getRoutes(store);
+
 
     if (__DISABLE_SSR__) {
       const content = html(config, tools.assets(), store, headers);
@@ -37,7 +40,8 @@ export default (projectConfig, projectToolsConfig) => {
       });
     }
     return new Promise((resolve) => {
-      match(routes, originalUrl, store, (error, redirectLocation, renderProps) => {
+      match(routes, originalUrl, store, memoryHistory, (error, redirectLocation, renderProps) => {
+
         if (redirectLocation) {
           redirect(redirectLocation.pathname + redirectLocation.search, resolve);
         } else if (error) {
