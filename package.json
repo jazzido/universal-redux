@@ -1,5 +1,5 @@
 {
-  "name": "universal-redux",
+  "name": "universal-redux-jazzido",
   "description": "A universal redux renderer (ES6, Webpack, Express)",
   "author": "Buck DeFore <bdefore@gmail.com> (http://github.com/bdefore)",
   "license": "MIT",
