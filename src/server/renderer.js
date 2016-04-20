@@ -87,7 +87,7 @@ export default (projectConfig, projectToolsConfig) => {
     case 'express': {
       return (req, res) => {
         dynamicMiddleware(req.originalUrl,
-          res._headers,
+          req.headers,
           (status, body) => res.status(status).send(body),
           (url) => res.redirect(url));
       };
